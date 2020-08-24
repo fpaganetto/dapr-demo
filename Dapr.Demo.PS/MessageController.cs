@@ -55,16 +55,16 @@ namespace Dapr.Demo.PS
             _logger.LogInformation($"Message with id {message.Id.ToString()} received!");
 
             //await _client.SaveStateAsync<Message>("messagetopic", message.Id.ToString(), message);
-            await _client.PublishEventAsync<Message>("messagetopic", message);
+            await _client.PublishEventAsync<Message>("test","messagetopic", message);
 
-            var message2 = _client.GetStateAsync<Message>("messagetopic", "53E1D29A-7556-40AE-9877-E2251BCBAA5E");
+            //var message2 = _client.GetStateAsync<Message>("messagetopic", "53E1D29A-7556-40AE-9877-E2251BCBAA5E");
 
             _logger.LogInformation($"Message with id {message.Id.ToString()} saved!");
 
             return Ok();
         }
 
-        [Topic("messagetopic")]
+        [Topic("test", "messagetopic")]
         [HttpPost]
         [Route("messagetopic")]
         public async Task<IActionResult> ProcessOrder([FromBody] Message message)
@@ -73,5 +73,22 @@ namespace Dapr.Demo.PS
             _logger.LogInformation($"Message with id {message.Id.ToString()} processed!");
             return Ok();
         }
+
+        /*
+        [Topic("pubsub", "A")]
+        [HttpPost]
+        [Route("messagetopic2")]
+        public async Task<IActionResult> MessagePubSub([FromBody] MessageV2 message)
+        {
+            //Process message placeholder
+            _logger.LogInformation($"Message with id {message.Message} processed!");
+            return Ok();
+        }
+
+        public class MessageV2
+        {
+            public string Message { get; set; }
+        }
+        */
     }
 }
