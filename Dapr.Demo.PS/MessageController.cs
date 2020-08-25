@@ -74,7 +74,19 @@ namespace Dapr.Demo.PS
             return Ok();
         }
 
-        /*
+
+        [HttpPost]
+        [Route("api/messagecontext2")]
+        public async Task<IActionResult> ReceiveMessageContext2([FromBody] MessageV2 message)
+        {
+            await _client.PublishEventAsync("pubsub", "A", message);
+
+            _logger.LogInformation($"Message {message.Message} saved!");
+
+            return Ok();
+        }
+
+
         [Topic("pubsub", "A")]
         [HttpPost]
         [Route("messagetopic2")]
@@ -89,6 +101,6 @@ namespace Dapr.Demo.PS
         {
             public string Message { get; set; }
         }
-        */
+        
     }
 }
